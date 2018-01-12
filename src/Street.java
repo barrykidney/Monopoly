@@ -67,7 +67,9 @@ public class Street extends Property {
         if(this.getFullSet()) { System.out.print("\nPlayer owns the full set"); }
         if(this.getHouses()>0) {
             System.out.print("\nno. of houses: " + this.getHouses());
-            System.out.print("\nno. of hotels: " + this.getHotels());
+        }
+        if(this.getHotels()>0) {
+            System.out.print("\nThere is a hotel on this street");
         }
     }
 }

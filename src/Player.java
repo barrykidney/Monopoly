@@ -138,11 +138,6 @@ public class Player {
             } else {
                 bk.makeTransferTo(this, p.getPurchasePrice() / 2);
                 p.setMortgaged(true);
-                if(p instanceof Street) {
-                    if(this.checkFullSet((Street) p)) {
-                        System.out.print("You have completed the set.");
-                    }
-                }
                 System.out.print(p.getName() + " is now mortgaged.");
             }
         }
