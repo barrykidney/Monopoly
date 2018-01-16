@@ -7,24 +7,25 @@ public class Main {
 //            p.setLap(2);
 //        }
 //
+//
+//        System.out.print(game.board.get(6).getName());
+//        System.out.print(game.board.get(8).getName());
+//        System.out.print(game.board.get(9).getName());
+//
+//
+//
+//        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(6));
+//        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(8));
+//        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(9));
+//
+//        for(Property p : game.playerList.get(0).getOwned()) {
+//            System.out.print(p.getName());
+//        }
+//
+//        System.out.print(game.playerList.get(0).getBalance());
+//        game.bank.makeTransferTo(game.playerList.get(0), 320);
+//        System.out.print(game.playerList.get(0).getBalance());
 
-        System.out.print(game.board.get(6).getName());
-        System.out.print(game.board.get(8).getName());
-        System.out.print(game.board.get(9).getName());
-
-
-
-        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(6));
-        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(8));
-        game.playerList.get(0).buyProperty(game.bank,(Property) game.board.get(9));
-
-        for(Property p : game.playerList.get(0).getOwned()) {
-            System.out.print(p.getName());
-        }
-
-        System.out.print(game.playerList.get(0).getBalance());
-        game.bank.makeTransferTo(game.playerList.get(0), 320);
-        System.out.print(game.playerList.get(0).getBalance());
 
 
         game.play();

@@ -10,7 +10,7 @@ public class Game {
     public static Scanner housePurchaseInput = new Scanner(System.in);
     public static Scanner propMortInput = new Scanner(System.in);
     public static Random rand = new Random();
-    public Bank bank = new Bank();
+    public static Bank bank = new Bank();
     public static List<Space> board = new ArrayList<>();
     public static List<Player> playerList = new ArrayList<>();
 
@@ -66,9 +66,9 @@ public class Game {
         board.add(new TaxSpace("Super Tax", 100));
         board.add(new Street("Shewsbury Rd.",400,50,"nv",200));
 
-        playerList.add(new Player("Dog", bank));
-        playerList.add(new Player("Boat", bank));
-        playerList.add(new Player("Hat", bank));
+//        playerList.add(new Player("Dog", bank));
+//        playerList.add(new Player("Boat", bank));
+//        playerList.add(new Player("Hat", bank));
 
         playersRemaining = playerList.size();
     }
@@ -174,6 +174,9 @@ public class Game {
 
 
     public void play(){
+
+        Menu menu = new Menu();
+        menu.display();
 
         shuffle(CardSpace.chance);
         shuffle(CardSpace.cChest);
