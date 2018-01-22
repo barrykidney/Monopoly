@@ -176,7 +176,7 @@ public class Game {
     public void play(){
 
         Menu menu = new Menu();
-        menu.display();
+        menu.startMenu();
 
         shuffle(CardSpace.chance);
         shuffle(CardSpace.cChest);
@@ -265,6 +265,7 @@ public class Game {
 
                             switch (userInt) {
                                 case 0: // game menu
+                                    menu.inGameMenu();
                                     break;
 
                                 case 1: // view current spot info
@@ -309,9 +310,16 @@ public class Game {
 
                                     break;
                                 case 6: // buy house/hotel
+
+                                    if(ply.getOwned().size() < 1) {
+                                        System.out.print("\nYou do not own any Properties.");
+                                        break;
+                                    }
+
                                     System.out.print("\nList of valid streets.\n");
                                     List<Street> strLst1 = new ArrayList<>();
                                     int refNumb = 1;
+
                                     for(Property p : ply.getOwned()){
                                         if(p instanceof Street){
                                                 Street str = (Street) p;

@@ -8,7 +8,6 @@ public class Player {
     private String playerCharacter;
     private int balance, boardSpot, currentLap, JailTurns, playerNumb;
     private List<Property> owned = new ArrayList<>();
-//    private List<Property> owned = new ArrayList<>();
 
 
     public Player(String Character, Bank bk){
@@ -24,7 +23,7 @@ public class Player {
         bk.makeTransferTo(this, 1550);
     }
 
-    public String getPlayerCharacter(){
+    String getPlayerCharacter(){
         return this.playerCharacter;
     }
 
@@ -32,7 +31,7 @@ public class Player {
         return this.playerNumb;
     }
 
-    public void setBoardSpot(int move) {
+    void setBoardSpot(int move) {
         if(move == 999) {
             this.boardSpot = 10;
             this.inJail = true;
@@ -42,23 +41,23 @@ public class Player {
         }
     }
 
-    public int getBoardSpot(){
+    int getBoardSpot(){
         return this.boardSpot;
     }
 
-    public void setLap(int l){
+    void setLap(int l){
         this.currentLap = l;
     }
 
-    public int getLap(){
+    int getLap(){
         return this.currentLap;
     }
 
-    public void setBalance(int money){
+    void setBalance(int money){
         this.balance += money;
     }
 
-    public int getBalance(){
+    int getBalance(){
         return this.balance;
     }
 
@@ -66,55 +65,55 @@ public class Player {
         this.broke = b;
     }
 
-    public boolean getBroke(){
+    boolean getBroke(){
         return this.broke;
     }
 
-    public boolean getActive(){
+    boolean getActive(){
         return this.active;
     }
 
-    public void setActive(boolean bol){
+    void setActive(boolean bol){
         this.active = bol;
     }
 
-    public boolean getInJail(){
+    boolean getInJail(){
         return this.inJail;
     }
 
-    public void setInJail(boolean j){
+    void setInJail(boolean j){
         this.inJail = j;
     }
 
-    public int getJailTurns(){
+    int getJailTurns(){
         return this.JailTurns;
     }
 
-    public void setJailTurns(int j){
+    void setJailTurns(int j){
         this.JailTurns = j;
     }
 
-    public boolean getChanceGOOJC(){
+    boolean getChanceGOOJC(){
         return this.chanceGOOJC;
     }
 
-    public void setChanceGOOJC(boolean jc){
+    void setChanceGOOJC(boolean jc){
         this.chanceGOOJC = jc;
     }
 
-    public boolean getCchestGOOJC(){
+    boolean getCchestGOOJC(){
         return this.cChestGOOJC;
     }
 
-    public void setCchestGOOJC(boolean jc){
+    void setCchestGOOJC(boolean jc){
         this.cChestGOOJC = jc;
     }
 
-    public List<Property> getOwned(){
+    List<Property> getOwned(){
         return this.owned;
     }
 
-    public boolean buyProperty(Bank seller, Property p) {
+    boolean buyProperty(Bank seller, Property p) {
         if (this.makeTransferTo(seller, p.getPurchasePrice())) {
             this.owned.add(p);
             p.setOwner(this);
@@ -129,7 +128,7 @@ public class Player {
         }
     }
 
-    public void mortgageProperty(Bank bk, Property p) {
+    void mortgageProperty(Bank bk, Property p) {
         if(p instanceof Street && (((Street) p).getHouses()!=0 || ((Street) p).getHotels()!=0)) {
             System.out.print("You mush sell all houses and hotels before you can mortgage this property.");
         } else {
@@ -174,21 +173,21 @@ public class Player {
         }
     }
 
-    public boolean buyHouse(Street s, Bank b) {
+    boolean buyHouse(Street s, Bank b) {
 
-        if (b.getHousesAvail() > 0) {
-            if (s.getHouses() < 4) {
+        if (s.getHouses() < 4) {
+            if (b.getHousesAvail() > 0) {
 
-                boolean validSale = true;
+                boolean validPurcahse = true;
                 for (Property prop : this.owned) {
                     if (prop instanceof Street) {
                         if ((((Street) prop).getColor().equals(s.getColor())) &&
                                 (((Street) prop).getHouses() < s.getHouses())) {
-                            validSale = false;
+                            validPurcahse = false;
                         }
                     }
                 }
-                if(!validSale) {
+                if(!validPurcahse) {
                     System.out.print("\nYou must first purchase a house on another street in this set.");
                     return false;
                 }
@@ -202,17 +201,69 @@ public class Player {
                     return false;
                 }
             } else {
-                System.out.print("\nThere is already the maximum number of houses on this property.");
+                System.out.print("\nThere are no more houses available in the bank.");
+                return false;
+            }
+        } else if (s.getHouses() == 4) {
+            if (b.getHotelsAvail() > 0) {
+
+                boolean validPurcahse = true;
+                for (Property prop : this.owned) {
+                    if (prop instanceof Street) {
+                        if ((((Street) prop).getColor().equals(s.getColor())) &&
+                                (((Street) prop).getHouses() < 4)) {
+                            validPurcahse = false;
+                        }
+                    }
+                }
+                if (!validPurcahse) {
+                    System.out.print("\nYou must first purchase a house on another street in this set.");
+                    return false;
+                }
+                if (this.makeTransferTo(b, s.getHousePrice())) {
+                    b.setHousesAvail(b.getHousesAvail() + 4);
+                    s.setHouses(0);
+                    b.setHotelsAvail(b.getHotelsAvail() - 1);
+                    s.setHotels(1);
+                    System.out.print("\nYou have purchased a hotel on " + s.getName() + ".");
+                    return true;
+                } else {
+                    System.out.print("\nYou have insufficient funds to buy a hotel on this property.");
+                    return false;
+                }
+            } else {
+                System.out.print("\nThere are no more hotels available in the bank.");
                 return false;
             }
         } else {
-            System.out.print("\nThere are no more houses available in the bank.");
+            System.out.print("\nThere is already a hotel on this property.");
             return false;
         }
     }
 
-    public boolean sellHouse(Street s, Bank b) {
-        if(s.getHouses()>0) {
+    boolean sellHouse(Street s, Bank b) {
+
+        if (s.getHotels()>0) {
+            if (b.getBalance() > (s.getHousePrice() / 2)) {
+                if (b.getHousesAvail() > 3) {
+                    b.makeTransferTo(this, s.getHousePrice() / 2);
+                    s.setHotels(0);
+                    b.setHotelsAvail(b.getHotelsAvail() + 1);
+                    s.setHouses(s.getHouses() + 4);
+                    b.setHousesAvail(b.getHousesAvail() - 4);
+                    System.out.print("Sale successful");
+                    return true;
+                } else {
+                    // EDGE CASE: if there are not enough houses left in the bank you must sell hotel + multiple
+                    // houses until the board is legal
+                    System.out.print("There is not enough money in the bank to complete this transaction.");
+                    return false;
+                }
+            } else {
+                System.out.print("There is not enough money in the bank to complete this transaction.");
+                return false;
+            }
+        } else if(s.getHouses()>0) {
             boolean validSale = true;
             for (Property prop : this.owned) {
                 if (prop instanceof Street) {
