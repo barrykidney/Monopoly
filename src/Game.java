@@ -370,34 +370,58 @@ public class Game {
                                     break;
 
                                 case 8: // mortgage/unmortgage property
+
+
+
                                     System.out.print("\nList of valid streets.\n");
                                     List<Property> mortLst = new ArrayList<>();
                                     int refNumb3 = 1;
-                                    for(Property p : ply.getOwned()){
-                                        if(!p.getMortgaged()){
-                                            if(p instanceof Street){
-                                                Street str = (Street) p;
-                                                if(str.getHouses()==0 && str.getHotels()==0){
-                                                    System.out.print("\n" + refNumb3 + ". " + str.getName() + ", Mortgage " +
-                                                            "price: " + str.getPurchasePrice()/2);
-                                                    mortLst.add(str);
-                                                    refNumb3++;
-                                                }
-                                            } else {
-                                                System.out.print("\n" + refNumb3 + ". " + p.getName() + ", Mortgage price: "
-                                                        + p.getPurchasePrice()/2);
-                                                mortLst.add(p);
-                                                refNumb3++;
-                                            }
+
+                                    for(Property p : ply.getOwned()) {
+                                        if (p.getMortgaged()) {
+                                            System.out.print("\n" + refNumb3 + ". " + p.getName() + ", Um-mortgage " +
+                                                    "price: " + p.getPurchasePrice() / 2);
+                                        } else {
+                                            System.out.print("\n" + refNumb3 + ". " + p.getName() + ", Mortgage " +
+                                                    "price: " + p.getPurchasePrice() / 2);
                                         }
+                                        mortLst.add(p);
+                                        refNumb3++;
                                     }
+
+
+
+
+                                    //                                    for(Property p : ply.getOwned()){
+//                                        if(!p.getMortgaged()){
+//                                            if(p instanceof Street){
+//                                                Street str = (Street) p;
+//                                                if(str.getHouses()==0 && str.getHotels()==0){
+//                                                    System.out.print("\n" + refNumb3 + ". " + str.getName() + ", Mortgage " +
+//                                                            "price: " + str.getPurchasePrice()/2);
+//                                                    mortLst.add(str);
+//                                                    refNumb3++;
+//                                                }
+//                                            } else {
+//                                                System.out.print("\n" + refNumb3 + ". " + p.getName() + ", Mortgage price: "
+//                                                        + p.getPurchasePrice()/2);
+//                                                mortLst.add(p);
+//                                                refNumb3++;
+//                                            }
+//                                        }
+//                                    }
                                     System.out.print("\n\nSelect the number of the street that you would \nlike to " +
-                                            "mortgage or press 0 to cancel.");
+                                            "mortgage or un-mortgage or press 0 to cancel.");
                                     if(propMortInput.hasNextInt()) {
                                         int userMor = propMortInput.nextInt();
                                         if(userMor == 0){ break; }
+
                                         if(userMor > 0 && userMor <= mortLst.size()){
-                                            ply.mortgageProperty(bank, mortLst.get(userMor-1));
+                                            if((mortLst.get(userMor-1)).getMortgaged()) {
+                                                ply.unMortgageProperty(bank, mortLst.get(userMor - 1));
+                                            } else {
+                                                ply.mortgageProperty(bank, mortLst.get(userMor - 1));
+                                            }
                                         } else { System.out.print("\nPlease enter a valid option"); }
                                         propMortInput.nextLine();
                                     } else { System.out.print("\nPlease enter a valid option"); }

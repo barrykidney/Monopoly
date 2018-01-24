@@ -128,16 +128,67 @@ public class Player {
         }
     }
 
-    void mortgageProperty(Bank bk, Property p) {
-        if(p instanceof Street && (((Street) p).getHouses()!=0 || ((Street) p).getHotels()!=0)) {
-            System.out.print("You mush sell all houses and hotels before you can mortgage this property.");
+    boolean mortgageProperty(Bank bk, Property p) {
+
+        if (p.getMortgaged()) {
+            System.out.print("This property is already mortgaged");
+            return false;
+
         } else {
-            if (p.getMortgaged()) {
-                System.out.print("This property is already mortgaged");
+
+            if (p instanceof Street) {
+                if (((Street) p).getHouses() != 0 || ((Street) p).getHotels() != 0) {
+                    System.out.print("You mush sell all houses and hotels before you can mortgage this property.");
+                    return false;
+                }
+
+                if (((Street) p).getFullSet()) {
+                    // find the houses in the set
+                    boolean housesOnStreet = false;
+                    for (Property str : this.getOwned()) {
+                        if (str instanceof Street) {
+                            Street s = (Street) str;
+                            if (s.getColor().equals(((Street) p).getColor()) && (s.getHotels() > 0 || s.getHouses() > 0)) {
+                                housesOnStreet = true;
+                            }
+                        }
+                    }
+
+                    if (housesOnStreet) {
+                        // if there are houses on any of them block mortgage
+                        System.out.print("All houses and hotels must be sold on all streets in a set before a street " +
+                                "in that set can be sold.");
+                        return false;
+
+                    } else {
+                        // otherwise complete the mortgage
+                        bk.makeTransferTo(this, p.getPurchasePrice() / 2);
+                        p.setMortgaged(true);
+
+                        for (Property str : this.getOwned()) {
+                            if (str instanceof Street) {
+                                Street s = (Street) str;
+                                if (s.getColor().equals(((Street) p).getColor())) {
+                                    s.setFullSet(false);
+                                }
+                            }
+                        }
+                        System.out.print(p.getName() + " is now mortgaged.");
+                        return true;
+                    }
+
+                } else {
+                    bk.makeTransferTo(this, p.getPurchasePrice() / 2);
+                    p.setMortgaged(true);
+                    System.out.print(p.getName() + " is now mortgaged.");
+                    return true;
+                }
+
             } else {
                 bk.makeTransferTo(this, p.getPurchasePrice() / 2);
                 p.setMortgaged(true);
                 System.out.print(p.getName() + " is now mortgaged.");
+                return true;
             }
         }
     }
